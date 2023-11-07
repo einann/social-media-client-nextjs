@@ -23,7 +23,7 @@ export default function Login() {
                     </label>
                     <button className="bg-cyan-600 shadow-lg shadow-cyan-600/50 rounded-md p-1 text-white w-1/2 self-center hover:bg-cyan-700 transition">Login</button>
                     <div className="flex justify-between mt-5 text-sm border-t-2 border-t-slate-100 pt-2">
-                        <p className="text-slate-500">Don't have an account?</p>
+                        <p className="text-slate-500">Do not have an account?</p>
                         <Link href="/signup" className="text-sky-500 font-bold hover:text-sky-600">Sign up</Link>
                     </div>
                     <Link href="/forgotpassword" className="mt-1 text-sky-500 text-sm hover:text-sky-600">Forgot password?</Link>
