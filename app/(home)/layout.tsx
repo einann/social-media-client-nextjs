@@ -1,4 +1,4 @@
-import Navbar from "../components/Navbar"
+import Navbar from "../components/Navbar";
 
 type LayoutProps = { children?: React.ReactNode }
 
@@ -7,7 +7,9 @@ export default function HomeLayout({ children }: LayoutProps) {
         <main className="w-full flex flex-col">
             <div className="w-full md:w-1/2 h-screen border self-center bg-white">
                 <Navbar />
-                {children}
+                <div className="flex flex-col md:flex-row">
+                    {children}
+                </div>
             </div>
         </main>
     )

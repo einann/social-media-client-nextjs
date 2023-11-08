@@ -1,22 +1,12 @@
-import Image from 'next/image'
-import DummyAvatar from '../../public/dummy_avatar.png';
 import Link from 'next/link';
+import ProfileButton from './ProfileButton';
 
 export default function Navbar() {
     return (
-        <nav className="flex flex-row items-center bg-cyan-700 px-2 py-1 text-white justify-between">
-            <Link href="/" className='font-bold'>EINAN_SOCM</Link>
-            <input type='text' className='rounded-md' /> {/* GEÇİCİ - Burası ayrı bir arama componenti olarak yazılacak */}
-            <Link href="/user" className='flex flex-row items-center'>
-                <Image 
-                    src={DummyAvatar}
-                    alt="Avatar"
-                    width={30}
-                    height={30}
-                    className='border rounded-full bg-emerald-700'
-                />
-                <p className='ml-1'>Ebubekir İnan</p>
-            </Link>
+        <nav className="flex flex-col md:flex-row items-center justify-center bg-slate-100 shadow-lg md:justify-between">
+            <Link href="/" className='font-bold mb-2 ml-2 md:mb-0 text-cyan-700'>EINAN_SOCM</Link>
+            <input type='text' className='rounded-md caret-cyan-600 text-cyan-800 px-2 mb-1 md:mb-0' /> {/* GEÇİCİ - Burası ayrı bir arama componenti olarak yazılacak */}
+            <ProfileButton />
         </nav>
     )
 }
