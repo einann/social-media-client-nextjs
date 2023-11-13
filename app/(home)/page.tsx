@@ -3,6 +3,8 @@ import Entry from "../components/Entry/Entry";
 import DummyAvatar from '../../public/dummy_avatar.png';
 import DummyContentImage from '../../public/dummy_content_image.jpg';
 
+import { parse } from "date-fns";
+
 const allData = [
     {
         entryId: "6yh6ha4ga",
@@ -39,6 +41,8 @@ const allData = [
     }
 ]
 
+var asd = allData[0].createDate;
+
 export default function Home() {
     return (
         <main className="p-2 w-full md:p-5">
@@ -48,7 +52,7 @@ export default function Home() {
             {/* Entries */}
             {allData.map(data => {
                 return (
-                    <Entry key={data.entryId} data={data} />
+                    <Entry key={data.entryId} data={data} isDetail={false} />
                 )
             })}
         </main>
