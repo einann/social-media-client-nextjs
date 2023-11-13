@@ -18,7 +18,7 @@ interface EntryInterface {
 }
 
 // data için interface oluşturulacak
-export default function Entry({ data }: any) {
+export default function Entry({ data, isDetail }: any) {
     return (
         <main className="w-full bg-slate-100 p-2 rounded-md mb-3">
             {/* User Info and Date Info */}
@@ -43,11 +43,7 @@ export default function Entry({ data }: any) {
 
             {/* Content */}
             <div className='text-slate border-b'>
-                <Link href={`/${data.createdUser.username}/${data.entryId}`}>
-                    <div className='hover:bg-slate-200 transition duration-200 p-4'>
-                        <span>{data.content}</span>
-                    </div>
-                </Link>
+                {isDetail ? <TextContent data={data} /> : <LinkContent data={data} />}
                 {data.contentImage && (
                     <div className='flex flex-row justify-center p-4'>
                         <Image
@@ -65,5 +61,23 @@ export default function Entry({ data }: any) {
                 <CommentButton />
             </div>
         </main>
+    )
+}
+
+const LinkContent = ({ data }: any) => {
+    return (
+        <Link href={`/entry/${data.entryId}`}>
+            <div className='hover:bg-slate-200 transition duration-200 p-4'>
+                <span>{data.content}</span>
+            </div>
+        </Link>
+    )
+}
+
+const TextContent = ({ data }: any) => {
+    return (
+        <div className='p-4'>
+            <span>{data.content}</span>
+        </div>
     )
 }
