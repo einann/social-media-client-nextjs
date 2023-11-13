@@ -1,7 +1,8 @@
 import Image from 'next/image';
-import LikeButton from './LikeButton';
-import CommentButton from './CommentButton';
+import LikeButton from '../LikeButton';
+import CommentButton from '../CommentButton';
 import Link from 'next/link';
+import Comment from '../Comment/Comment';
 
 interface EntryInterface {
     entryId: string;
@@ -60,6 +61,9 @@ export default function Entry({ data, isDetail }: any) {
                 <LikeButton />
                 <CommentButton />
             </div>
+
+
+            {isDetail && <Comment data={data.entryId} />}
         </main>
     )
 }

@@ -3,8 +3,6 @@ import Entry from "../components/Entry/Entry";
 import DummyAvatar from '../../public/dummy_avatar.png';
 import DummyContentImage from '../../public/dummy_content_image.jpg';
 
-import { parse } from "date-fns";
-
 const allData = [
     {
         entryId: "6yh6ha4ga",
