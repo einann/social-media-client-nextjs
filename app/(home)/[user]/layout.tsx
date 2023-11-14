@@ -1,4 +1,4 @@
-import DummyAvatar from "../../../public/dummy_avatar.png";
+import DummyAvatar from "@/public/dummy_avatar.png";
 import Image from "next/image";
 import FollowButton from "./FollowButton";
 import Link from "next/link";
