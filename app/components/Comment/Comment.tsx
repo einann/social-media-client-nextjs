@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import DummyAvatar from '../../../public/dummy_avatar.png';
+import DummyAvatar from '@/public/dummy_avatar.png';
 import Image from 'next/image';
 import LikeButton from '../LikeButton';
 
@@ -18,7 +18,7 @@ const comments = [
         },
         "active": "",
         "parentId": {
-            "entryId": "fac392e5f3",
+            "entryId": "6yh6ha4ga",
             "content": "yenicontent",
             "createDate": "20230806",
             "createTime": "221407",
@@ -41,7 +41,7 @@ const comments = [
         },
         "active": "true",
         "parentId": {
-            "entryId": "7d3b09fec3",
+            "entryId": "6yh6ha4ga",
             "content": "bu da farklı bir deneme, bakalım ne olacak.",
             "createDate": "20230806",
             "createTime": "221505",
@@ -64,7 +64,7 @@ const comments = [
         },
         "active": "",
         "parentId": {
-            "entryId": "7d3b09fec3",
+            "entryId": "6yh6ha4ga",
             "content": "bu da farklı bir deneme, bakalım ne olacak.",
             "createDate": "20230806",
             "createTime": "221505",
@@ -87,7 +87,7 @@ const comments = [
         },
         "active": "false",
         "parentId": {
-            "entryId": "fac392e5f3",
+            "entryId": "6yh6ha4ga",
             "content": "yenicontent",
             "createDate": "20230806",
             "createTime": "221407",
@@ -110,7 +110,7 @@ const comments = [
         },
         "active": "false",
         "parentId": {
-            "entryId": "d7c80b6175",
+            "entryId": "6yh6ha4ga",
             "content": "bilmemne",
             "createDate": "20231020",
             "createTime": "183313",
@@ -137,12 +137,12 @@ const comments = [
 ];
 
 
-export default function Comment({ parentEntryId }: any) {
+export default function Comment({ parentId }: any) {
     return (
         <main className='mt-5 px-5'>
             {comments.map(comment => {
                 return (
-                    <div key={comment.commentId} className='flex flex-row p-2 border border-cyan-700/20 mb-1 bg-white rounded-md'>
+                    <div key={comment.commentId} className='flex flex-row p-2 mb-1 bg-slate-200/50 rounded-md'>
                         <Link href={`/${comment.createdUser.username}`}>
                             <Image
                                 src={DummyAvatar}
@@ -152,7 +152,7 @@ export default function Comment({ parentEntryId }: any) {
                                 className='rounded-full mr-2'
                             />
                         </Link>
-                        <div className='w-full'>
+                        <div className='w-full cursor-default'>
                             <div className='flex flex-row justify-between w-full'>
                                 <Link href={`/${comment.createdUser.username}`} className='hover:underline'>
                                     <div className='text-xs flex flex-col md:flex-row md:text-sm'>
@@ -170,7 +170,7 @@ export default function Comment({ parentEntryId }: any) {
                             <div className='text-slate-700 py-1 text-sm'>
                                 {comment.content}
                             </div>
-                            <LikeButton />
+                            <LikeButton type='comment' id={comment.commentId} parentId={comment.parentId.entryId} isDetail={true} />
                         </div>
                     </div>
                 )

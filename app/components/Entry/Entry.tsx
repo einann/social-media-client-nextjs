@@ -21,7 +21,7 @@ interface EntryInterface {
 // data için interface oluşturulacak
 export default function Entry({ data, isDetail }: any) {
     return (
-        <main className="w-full bg-slate-100 p-2 rounded-md mb-3">
+        <main className="w-full bg-slate-100 p-2 rounded-md mb-3 cursor-default">
             {/* User Info and Date Info */}
             <div className='flex flex-row justify-between border-b pb-2'>
                 <Link href={`/user/${data.createdUser.username}`}>
@@ -53,17 +53,16 @@ export default function Entry({ data, isDetail }: any) {
                         />
                     </div>
                 )}
-
             </div>
 
             {/* Like and Comment Buttons */}
             <div className='flex flex-row gap-10 pt-2'>
-                <LikeButton />
+                <LikeButton type='entry' id={data.entryId} parentId={null} isDetail={isDetail} />
                 <CommentButton />
             </div>
 
 
-            {isDetail && <Comment data={data.entryId} />}
+            {/* {isDetail && <Comment data={data.entryId} />} */}
         </main>
     )
 }

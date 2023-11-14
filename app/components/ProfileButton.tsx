@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image"
-import DummyAvatar from '../../public/dummy_avatar.png';
+import DummyAvatar from '@/public/dummy_avatar.png';
 import { MdOutlineExpandMore, MdOutlineExpandLess } from "react-icons/md";
 import { CgProfile, CgLogOut } from "react-icons/cg";
 import { useRef, useState, useEffect } from "react";
