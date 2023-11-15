@@ -1,3 +1,4 @@
+import { GetServerSidePropsContext } from "next";
 import Navbar from "../components/Navbar";
 
 type LayoutProps = {

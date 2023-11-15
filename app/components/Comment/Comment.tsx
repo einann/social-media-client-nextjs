@@ -180,10 +180,4 @@ export default function Comment({ parentId }: any) {
 }
 
 
-// üstte yorum yapma seçeneği olacak.
-
 // 10 adet comment alacak ilk başta, sonrasında view more ile görüntülenecek veya scroll ile.
-
-// yorum beğenilerini ve entry beğenilerini görme olacak.
-
-// MODAL TEKRAR DENENECEK
