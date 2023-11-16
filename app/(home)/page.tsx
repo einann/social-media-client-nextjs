@@ -44,24 +44,6 @@ const allData = [
 ]
 
 export default async function Home() {
-
-    const cookieStore = cookies();
-    const tokenCookie = cookieStore.get('access_token');
-    // console.log(tokenCookie?.value)
-
-    const filter = transformRequest("");
-
-    const rawres = await fetch('http://localhost:3001/entries/get', {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(filter),
-    });
-    const res = await rawres.json();
-    console.log(res)
-
     return (
         <main className="p-2 w-full md:p-5">
             {/* Share Something */}

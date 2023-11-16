@@ -57,12 +57,9 @@ export default function Entry({ data, isDetail }: any) {
 
             {/* Like and Comment Buttons */}
             <div className='flex flex-row gap-10 pt-2'>
-                <LikeButton type='entry' id={data.entryId} parentId={null} isDetail={isDetail} />
+                <LikeButton id={data.entryId} isDetail={isDetail} />
                 <CommentButton />
             </div>
-
-
-            {/* {isDetail && <Comment data={data.entryId} />} */}
         </main>
     )
 }
