@@ -170,7 +170,7 @@ export default function Comment({ parentId }: any) {
                             <div className='text-slate-700 py-1 text-sm'>
                                 {comment.content}
                             </div>
-                            <LikeButton type='comment' id={comment.commentId} parentId={comment.parentId.entryId} isDetail={true} />
+                            <LikeButton type='comment' id={comment.commentId} isDetail={true} />
                         </div>
                     </div>
                 )
