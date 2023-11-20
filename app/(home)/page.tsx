@@ -3,8 +3,9 @@ import Entry from "../components/Entry/Entry";
 import DummyAvatar from '@/public/dummy_avatar.png';
 import DummyContentImage from '@/public/dummy_content_image.jpg';
 import { transformRequest } from "@/util/transformRequest";
-
-import { cookies } from "next/headers";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../api/auth/[...nextauth]/route";
+import { redirect } from "next/navigation";
 
 
 const allData = [
@@ -44,6 +45,22 @@ const allData = [
 ]
 
 export default async function Home() {
+    const session = await getServerSession(authOptions);
+    if (session?.user.verified === "false") {
+        // redirect("/verify");
+    }
+    const filter = transformRequest("", "FullDto");
+    
+    const res = await fetch("http://localhost:3001/entries/get", {
+        method: "POST",
+        body: JSON.stringify(filter),
+        headers: {
+            "Authorization": `Bearer ${session?.tokens.access_token}`,
+            "Content-Type": "application/json"
+        }
+    });
+    const response = await res.json();
+
     return (
         <main className="p-2 w-full md:p-5">
             {/* Share Something */}

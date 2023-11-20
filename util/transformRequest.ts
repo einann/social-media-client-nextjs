@@ -1,4 +1,4 @@
-export const transformRequest = (rawRequest: string, orderBy: string = "", take: string = "0", skip: string = "0") => {
+export const transformRequest = (rawRequest: string, dto: string = "", orderBy: string = "", take: string = "0", skip: string = "0") => {
     const filter: { field: string; operation: string; value: string; group: string; }[] = [];
     if (rawRequest) {
         rawRequest.split("&").forEach(part => {
@@ -18,6 +18,7 @@ export const transformRequest = (rawRequest: string, orderBy: string = "", take:
     else {
         return {
             "filter": "GETALL",
+            dto,
             orderBy,
             take,
             skip,
@@ -26,6 +27,7 @@ export const transformRequest = (rawRequest: string, orderBy: string = "", take:
 
     return {
         filters: filter,
+        dto,
         orderBy,
         take,
         skip,

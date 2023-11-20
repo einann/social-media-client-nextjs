@@ -1,6 +1,18 @@
+"use client";
+
 import Link from "next/link";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function ChangePassword() {
+    const { data: session } = useSession();
+    const router = useRouter();
+    useEffect(() => {
+        if (session) {
+            router.push("/");
+        }
+    }, [session, router])
     return (
         <main className="flex flex-col items-center justify-center h-screen">
             <div className="flex flex-col p-10 md:w-1/3 w-full border-2 rounded-lg border-cyan-800/10 shadow-lg shadow-slate-600/25 bg-white">

@@ -2,7 +2,6 @@ import Image from 'next/image';
 import LikeButton from '../LikeButton';
 import CommentButton from '../CommentButton';
 import Link from 'next/link';
-import Comment from '../Comment/Comment';
 
 interface EntryInterface {
     entryId: string;
@@ -24,7 +23,7 @@ export default function Entry({ data, isDetail }: any) {
         <main className="w-full bg-slate-100 p-2 rounded-md mb-3 cursor-default">
             {/* User Info and Date Info */}
             <div className='flex flex-row justify-between border-b pb-2'>
-                <Link href={`/user/${data.createdUser.username}`}>
+                <Link href={`/profile/${data.createdUser.username}`}>
                     <div className='flex flex-row items-center gap-3 hover:bg-slate-200 transition duration-200 px-2'>
                         <Image
                             src={data.createdUser.profilePicture}

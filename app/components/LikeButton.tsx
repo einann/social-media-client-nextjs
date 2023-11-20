@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { BiLike } from 'react-icons/bi';
 
 export default function LikeButton({ id, isDetail }: any) {
-    console.log(id, isDetail)
     return (
         <>
             <div className='flex flex-row items-center text-sm'>

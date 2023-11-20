@@ -1,32 +1,39 @@
 "use client";
 
 import Link from "next/link";
+import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 
 export default function Login() {
+    const { data: session } = useSession();
     const router = useRouter();
+    useEffect(() => {
+        if (session) {
+            router.push("/");
+        }
+    }, [session, router])
+
     const [data, setData] = useState({
         username: '',
         password: '',
     })
+    const [error, setError] = useState('');
     const handleLogin = async (e: FormEvent) => {
         e.preventDefault();
-        const rawres = await fetch('http://localhost:3001/auth', {
-            method: 'POST',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                username: data.username,
-                password: data.password
-            }),
+        const res = await signIn("credentials", {
+            username: data.username,
+            password: data.password,
+            redirect: false,
+            callbackUrl: "/"
         });
-        const res = await rawres.json();
-        console.log(res)
-        if (res) {
-            router.push("/")
+        if (res && !res.ok) {
+            setError('Invalid credentials, try again.');
+        }
+        if (error) {
+            setTimeout(() => {
+                setError('')
+            }, 1000);
         }
     }
     return (
@@ -54,6 +61,7 @@ export default function Login() {
                         />
                     </label>
                     <button className="bg-cyan-600 shadow-lg shadow-cyan-600/50 rounded-md p-1 text-white w-1/2 self-center hover:bg-cyan-700 transition">Login</button>
+                    {error && <span className="text-center mt-3 text-pink-600">{error}</span>}
                     <div className="flex justify-between mt-5 text-sm border-t-2 border-t-slate-100 pt-2">
                         <p className="text-slate-500">Do not have an account?</p>
                         <Link href="/signup" className="text-sky-500 font-bold hover:text-sky-600">Sign up</Link>

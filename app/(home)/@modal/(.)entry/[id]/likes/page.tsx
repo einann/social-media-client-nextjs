@@ -76,7 +76,7 @@ export default function Likes({ params: { id: entryId } }: { params: { id: strin
                     {likes.map(like => {
                         return (
                             <div key={like.id} className="w-full border p-2 flex items-center bg-slate-200 rounded-md">
-                                <Link href={`/${like.user.username}`} className="mr-2">
+                                <Link href={`/profile/${like.user.username}`} className="mr-2">
                                     <Image
                                         src={DummyAvatar}
                                         alt="PP"
@@ -86,7 +86,7 @@ export default function Likes({ params: { id: entryId } }: { params: { id: strin
                                     />
                                 </Link>
                                 <div className="flex flex-col">
-                                    <span className="font-semibold hover:underline"><Link href={`/${like.user.username}`}>{like.user.firstName} {like.user.lastName}</Link></span>
+                                    <span className="font-semibold hover:underline"><Link href={`/profile/${like.user.username}`}>{like.user.firstName} {like.user.lastName}</Link></span>
                                     <span className="text-sm text-slate-500 cursor-default">{like.user.username}</span>
                                 </div>
                             </div>

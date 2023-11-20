@@ -143,7 +143,7 @@ export default function Comment({ parentId }: any) {
             {comments.map(comment => {
                 return (
                     <div key={comment.commentId} className='flex flex-row p-2 mb-1 bg-slate-200/50 rounded-md'>
-                        <Link href={`/${comment.createdUser.username}`}>
+                        <Link href={`/profile/${comment.createdUser.username}`}>
                             <Image
                                 src={DummyAvatar}
                                 alt="PP"
@@ -154,7 +154,7 @@ export default function Comment({ parentId }: any) {
                         </Link>
                         <div className='w-full cursor-default'>
                             <div className='flex flex-row justify-between w-full'>
-                                <Link href={`/${comment.createdUser.username}`} className='hover:underline'>
+                                <Link href={`/profile/${comment.createdUser.username}`} className='hover:underline'>
                                     <div className='text-xs flex flex-col md:flex-row md:text-sm'>
                                         <div>
                                             <span className='mr-1 text-cyan-700 font-bold'>{comment.createdUser.firstName}</span>
