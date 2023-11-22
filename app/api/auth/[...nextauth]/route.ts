@@ -57,6 +57,7 @@ export const authOptions: NextAuthOptions = {
     ],
     pages: {
         signIn: "/login",
+        signOut: "/logout",
     },
     callbacks: {
         // This function will be called everytime session is checked
@@ -74,8 +75,7 @@ export const authOptions: NextAuthOptions = {
             session.user = token.user;
             session.tokens = token.tokens;
             return session;
-        }
-
+        },
     }
 }
 

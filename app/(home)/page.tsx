@@ -47,7 +47,7 @@ const allData = [
 export default async function Home() {
     const session = await getServerSession(authOptions);
     if (session?.user.verified === "false") {
-        // redirect("/verify");
+        redirect("/verify");
     }
     const filter = transformRequest("", "FullDto");
     

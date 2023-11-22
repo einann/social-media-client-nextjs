@@ -28,7 +28,7 @@ export default function Login() {
             callbackUrl: "/"
         });
         if (res && !res.ok) {
-            setError('Invalid credentials, try again.');
+            setError('An error occured. Try again later.');
         }
         if (error) {
             setTimeout(() => {
