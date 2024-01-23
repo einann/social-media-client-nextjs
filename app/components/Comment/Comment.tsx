@@ -2,150 +2,37 @@ import Link from 'next/link';
 import DummyAvatar from '@/public/dummy_avatar.png';
 import Image from 'next/image';
 import LikeButton from '../LikeButton';
+import { transformRequest } from '@/util/transformRequest';
+import { globalFetch_server } from '@/util/globalFetch_server';
+import { CommentType } from '@/lib/comment.type';
+import { UserType } from '@/lib/user.type';
+import { genericDateFormat, genericTimeFormat } from '@/util/util';
 
-// DUMMY COMMENT DATA
-const comments = [
-    {
-        "commentId": "1e4477fbb8",
-        "content": "ikinci yorum fac ile başlayan parent id'ye",
-        "createDate": "20230927",
-        "createTime": "221351",
-        "createdUser": {
-            "username": "tokendanalınacak",
-            "firstName": "Tokendan",
-            "lastName": "Alınacak",
-            "profilePicture": DummyAvatar
-        },
-        "active": "",
-        "parentId": {
-            "entryId": "6yh6ha4ga",
-            "content": "yenicontent",
-            "createDate": "20230806",
-            "createTime": "221407",
-            "createdUser": "4real",
-            "active": "true",
-            "contentImage": "C:\\ei_socm\\entry_images\\88cfe5b1f9_1691349247034.jpg"
-        },
-        "likes": []
-    },
-    {
-        "commentId": "7265e6400d",
-        "content": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus corporis accusamus optio nesciunt, sequi molestias, odio rerum eius magnam illo harum, tenetur aperiam vero. Recusandae aliquam provident quisquam praesentium ea.",
-        "createDate": "20231020",
-        "createTime": "185940",
-        "createdUser": {
-            "username": "einan",
-            "firstName": "Ebubekir",
-            "lastName": "İnan",
-            "profilePicture": DummyAvatar
-        },
-        "active": "true",
-        "parentId": {
-            "entryId": "6yh6ha4ga",
-            "content": "bu da farklı bir deneme, bakalım ne olacak.",
-            "createDate": "20230806",
-            "createTime": "221505",
-            "createdUser": "einan",
-            "active": "true",
-            "contentImage": ""
-        },
-        "likes": []
-    },
-    {
-        "commentId": "acb3bd01f5",
-        "content": "7d ile başlayan entry yorumu - 1",
-        "createDate": "20230927",
-        "createTime": "223807",
-        "createdUser": {
-            "username": "tokendanalınacak",
-            "firstName": "Tokendan",
-            "lastName": "Alınacak",
-            "profilePicture": DummyAvatar
-        },
-        "active": "",
-        "parentId": {
-            "entryId": "6yh6ha4ga",
-            "content": "bu da farklı bir deneme, bakalım ne olacak.",
-            "createDate": "20230806",
-            "createTime": "221505",
-            "createdUser": "einan",
-            "active": "true",
-            "contentImage": ""
-        },
-        "likes": []
-    },
-    {
-        "commentId": "bf9d3f8b65",
-        "content": "yorumyorum",
-        "createDate": "20230927",
-        "createTime": "221229",
-        "createdUser": {
-            "username": "einan",
-            "firstName": "Ebubekir",
-            "lastName": "İnan",
-            "profilePicture": DummyAvatar
-        },
-        "active": "false",
-        "parentId": {
-            "entryId": "6yh6ha4ga",
-            "content": "yenicontent",
-            "createDate": "20230806",
-            "createTime": "221407",
-            "createdUser": "4real",
-            "active": "true",
-            "contentImage": "C:\\ei_socm\\entry_images\\88cfe5b1f9_1691349247034.jpg"
-        },
-        "likes": []
-    },
-    {
-        "commentId": "de6ffed420",
-        "content": "parent'i einan olacak ama kendisi 4real olacak",
-        "createDate": "20231020",
-        "createTime": "191020",
-        "createdUser": {
-            "username": "4real",
-            "firstName": "For",
-            "lastName": "Real",
-            "profilePicture": DummyAvatar
-        },
-        "active": "false",
-        "parentId": {
-            "entryId": "6yh6ha4ga",
-            "content": "bilmemne",
-            "createDate": "20231020",
-            "createTime": "183313",
-            "createdUser": "4real",
-            "active": "true",
-            "contentImage": ""
-        },
-        "likes": [
-            {
-                "id": 24,
-                "createDate": "20231020",
-                "createTime": "205012",
-                "user": {
-                    "username": "einan",
-                    "authLevel": "user",
-                    "firstName": "ebubekir",
-                    "lastName": "inan",
-                    "profilePicture": "C:\\ei_socm\\profile_pictures\\afcf43c4b3_1696609695597.jpg",
-                    "gender": "male"
-                }
-            }
-        ]
+export default async function Comment({ parentId }: { parentId: string }) {
+    const filter = transformRequest(`parentId==${parentId}`, 'FullDto');
+    const comments: CommentType[] = await globalFetch_server('comments/get', 'POST', filter);
+
+    const usernames = [...new Set(comments.map(comment => comment.createdUser))].join(",");
+    const userFilter = transformRequest(`username==${usernames}`);
+    const users: UserType[] = await globalFetch_server("users/get", "POST", userFilter);
+    if (users && users.length) {
+        comments.forEach(comment => {
+            comment.createDate_parsed = genericDateFormat(comment.createDate, "DD MMM YYYY");
+            comment.createTime_parsed = genericTimeFormat(comment.createTime);
+            const userOfEntry = users.find(user => user.username === comment.createdUser);
+            if (userOfEntry) comment.createdUser = userOfEntry;
+        });
     }
-];
 
-
-export default function Comment({ parentId }: any) {
     return (
         <main className='mt-5 px-5'>
+            {(!comments || !comments.length) && <h1 className='text-center'>No comments yet.</h1>}
             {comments.map(comment => {
                 return (
                     <div key={comment.commentId} className='flex flex-row p-2 mb-1 bg-slate-200/50 rounded-md'>
                         <Link href={`/profile/${comment.createdUser.username}`}>
                             <Image
-                                src={DummyAvatar}
+                                src={comment.createdUser.profilePicture}
                                 alt="PP"
                                 width={30}
                                 height={30}
@@ -163,14 +50,19 @@ export default function Comment({ parentId }: any) {
                                         <span className='text-slate-400'>({comment.createdUser.username})</span>
                                     </div>
                                 </Link>
-                                <div className='text-xs text-slate-600'>
-                                    3 days ago
+                                <div className='text-xs text-slate-600 flex gap-2'>
+                                    <span className='font-bold'>
+                                        {comment.createDate_parsed}
+                                    </span>
+                                    <span>
+                                        {comment.createTime_parsed}
+                                    </span>
                                 </div>
                             </div>
                             <div className='text-slate-700 py-1 text-sm'>
                                 {comment.content}
                             </div>
-                            <LikeButton type='comment' id={comment.commentId} isDetail={true} />
+                            <LikeButton source='comment' likes={comment.likes} id={comment.commentId} isDetail={true} />
                         </div>
                     </div>
                 )

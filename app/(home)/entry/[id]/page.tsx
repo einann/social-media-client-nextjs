@@ -1,28 +1,31 @@
 import Entry from '@/app/components/Entry/Entry'
-import React from 'react'
-import DummyAvatar from '@/public/dummy_avatar.png';
 import Comment from '@/app/components/Comment/Comment';
 import CommentSomething from '@/app/components/CommentSomething';
+import { globalFetch_server } from '@/util/globalFetch_server';
+import { transformRequest } from '@/util/transformRequest';
+import { EntryType } from '@/lib/entry.type';
+import { UserType } from '@/lib/user.type';
 
-const data = {
-    entryId: "6yh6ha4ga",
-    createdUser: {
-        username: "4real",
-        profilePicture: DummyAvatar
-    },
-    createDate: "20231108",
-    createTime: "160722",
-    contentImage: "",
-    content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incentryIdidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-};
+export default async function EntryDetail({ params }: { params: { id: string } }) {
+    const filter = transformRequest(`entryId==${params.id}`, 'FullDto');
+    const data: EntryType[] = await globalFetch_server('entries/get', 'POST', filter);
 
-export default function EntryDetail() {
+    const usernames = [...new Set(data.map(item => item.createdUser))].join(",");
+    const userFilter = transformRequest(`username==${usernames}`);
+    const users: UserType[] = await globalFetch_server("users/get", "POST", userFilter);
+
+    if (users && users.length) {
+        data.forEach(item => {
+            const userOfEntry = users.find(user => user.username === item.createdUser);
+            if (userOfEntry) item.createdUser = userOfEntry;
+        });
+    }
     return (
         <>
-            <main className={`p-2 mt-2 flex flex-col`}>
-                <Entry data={data} isDetail={true} />
-                <CommentSomething />
-                <Comment parentId={data.entryId} />
+            <main className={`p-2 mt-2 flex flex-col w-full`}>
+                <Entry data={data[0]} isDetail={true} />
+                <CommentSomething parentId={data[0].entryId} />
+                <Comment parentId={data[0].entryId} />
             </main>
         </>
     )

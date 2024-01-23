@@ -33,8 +33,7 @@ export const authOptions: NextAuthOptions = {
                     return null;
                 }
                 const { username, password } = credentials!;
-
-                const res = await fetch("http://localhost:3001/auth", {        // Base URL will be imported from a constants file or .env file.
+                const res = await fetch(`${process.env.BACKEND_URL}/auth`, {
                     method: "POST",
                     body: JSON.stringify({
                         username,
@@ -45,7 +44,7 @@ export const authOptions: NextAuthOptions = {
                     }
                 });
 
-                if (res.status == 401) {
+                if ([401, 404, 500].includes(res.status)) {
                     return null;
                 }
 

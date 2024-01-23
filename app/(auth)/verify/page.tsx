@@ -1,16 +1,30 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { getServerSession } from "next-auth";
-import { signOut } from "next-auth/react";
-import Link from "next/link";
 import { redirect } from "next/navigation";
 import { BiInfoCircle } from "react-icons/bi";
+import CustomLogout from "../../components/CustomLogout";
+import ResendEmail from "@/app/components/ResendEmail";
 
 export default async function VerifyEmail({ searchParams }: { searchParams?: { [key: string]: string | string[] | undefined } }) {
-    let error: string = "";
+    let error: string = "", sendEmail: boolean = false;
     const session = await getServerSession(authOptions);
-    if (!session) redirect("/login");
-    else if (session.user.verified === "true") redirect("/");
+    if (!session) redirect("/login");                                                                   // Users must be logged in to activate their account
+    else if (session.user.verified === "true") redirect("/");                                          // If account is already verified then redirect to home page
     else {
+        // Check user verified status in db, if it is true let them to login again.
+        const res = await fetch(`http://localhost:3001/users/${session.user.username}`, {
+            headers: {
+                "Authorization": `Bearer ${session?.tokens.access_token}`,
+                "Content-Type": "application/json"
+            }
+        });
+        if (res.ok) {
+            const response = await res.json();
+            if (response.verified === "true") {
+                redirect("/verified");
+            }
+        }
+
         const verifyToken = searchParams?.token;
         if (verifyToken) {
             const res = await fetch(`http://localhost:3001/token/${session.user.username}`, {
@@ -20,14 +34,16 @@ export default async function VerifyEmail({ searchParams }: { searchParams?: { [
                 }
             });
             if (res && !res.ok) {
-                error = 'CLICK TO Set token again and resend the mail.';
+                error = 'En error occured while verifying the token, please try again later.';
             }
             const response = await res.json();
             if (response.verifyToken !== verifyToken) {
-                error = 'CLICK TO Set token again and resend the mail.';
+                error = 'An error occured.';
+                sendEmail = true;
             }
             else if (new Date(response.expireDate) < new Date()) {
-                error = 'CLICK TO Set token again and resend the mail.';
+                error = 'Token has expired.';
+                sendEmail = true;
             }
 
             if (!error) {
@@ -44,13 +60,14 @@ export default async function VerifyEmail({ searchParams }: { searchParams?: { [
                 });
 
                 if (res.ok) {
-                    console.log('X')
+                    error = "";
                     redirect("/verified");
                 }
             }
         }
         else {
-            error = 'CLICK TO Set token again and resend the mail.';
+            error = 'Please click the link on your email.';
+            sendEmail = true;
         }
     }
 
@@ -61,7 +78,11 @@ export default async function VerifyEmail({ searchParams }: { searchParams?: { [
                     <BiInfoCircle className="text-5xl text-sky-600" />
                     <span className="pointer-events-none">An e-mail was sent to your adress <span className="font-bold text-cyan-800">{session.user.email}</span>. Please click the link on your email to verify your account.</span>
                 </div>
-                <Link href="/api/auth/signout">Logout</Link>
+                {error && <div className="mt-2 text-pink-600 flex justify-center border-b pb-2">{error}</div>}
+                <div className="flex justify-evenly">
+                    {sendEmail && <ResendEmail />}
+                    <CustomLogout text="Logout" />
+                </div>
             </div>
         </main>
     )

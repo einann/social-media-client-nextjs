@@ -2,23 +2,13 @@ import Image from 'next/image';
 import LikeButton from '../LikeButton';
 import CommentButton from '../CommentButton';
 import Link from 'next/link';
-
-interface EntryInterface {
-    entryId: string;
-    content: string;
-    createDate: string;
-    createTime: string;
-    createdUser: {
-        username: string;
-        profilePicture: string;
-    };
-    // active: string;
-    contentImage: string;
-    // likes: [];
-}
+import { EntryType } from '@/lib/entry.type';
+import { genericTimeFormat, genericDateFormat } from '@/util/util';
 
 // data için interface oluşturulacak
-export default function Entry({ data, isDetail }: any) {
+export default function Entry({ data, isDetail }: { data: EntryType, isDetail: boolean }) {
+    data.createDate_parsed = genericDateFormat(data.createDate, "DD MMM YYYY");
+    data.createTime_parsed = genericTimeFormat(data.createTime);
     return (
         <main className="w-full bg-slate-100 p-2 rounded-md mb-3 cursor-default">
             {/* User Info and Date Info */}
@@ -36,8 +26,8 @@ export default function Entry({ data, isDetail }: any) {
                     </div>
                 </Link>
                 <div className='flex flex-row gap-2 items-center text-sm text-slate-600'>
-                    <span className='font-bold'>{data.createDate}</span>
-                    <span>{data.createTime}</span>
+                    <span className='font-bold'>{data.createDate_parsed}</span>
+                    <span>{data.createTime_parsed}</span>
                 </div>
             </div>
 
@@ -56,8 +46,8 @@ export default function Entry({ data, isDetail }: any) {
 
             {/* Like and Comment Buttons */}
             <div className='flex flex-row gap-10 pt-2'>
-                <LikeButton id={data.entryId} isDetail={isDetail} />
-                <CommentButton />
+                <LikeButton source='entry' likes={data.likes} id={data.entryId} isDetail={isDetail} />
+                <CommentButton id={data.entryId} />
             </div>
         </main>
     )
